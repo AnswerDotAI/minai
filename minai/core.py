@@ -22,6 +22,7 @@ from operator import attrgetter, itemgetter
 import matplotlib.pyplot as plt
 import fastcore.all as fc
 from fastprogress import progress_bar, master_bar
+from fastprogress.core import format_time
 
 import torch, torch.nn.functional as F
 from torch import nn, optim
@@ -356,12 +357,15 @@ class MetricsCB(Callback):
 
     def _log(self, d): print(d)
     def before_fit(self, learn): learn.metrics = self
-    def before_epoch(self, learn): [o.reset() for o in self.all_metrics.values()]
+    def before_epoch(self, learn):
+        for o in self.all_metrics.values(): o.reset()
+        self.start_time = time()
 
     def after_epoch(self, learn):
         log = {k:f'{v.compute():.3f}' for k,v in self.all_metrics.items()}
         log['epoch'] = learn.epoch
         log['train'] = 'train' if learn.model.training else 'eval'
+        log['time'] = format_time(time() - self.start_time)
         self._log(log)
 
     def after_batch(self, learn):
