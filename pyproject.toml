@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "minai"
+dynamic = ["version"]
+description = "A miniture AI training framework for PyTorch"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "Apache-2.0"}
+authors = [{name = "Jeremy Howard and Jonathan Whitaker", email = "infos@fast.ai"}]
+keywords = ['python']
+classifiers = ["Natural Language :: English", "Intended Audience :: Developers", "Development Status :: 2 - Pre-Alpha", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3 :: Only"]
+dependencies = ['torch', 'fastcore', 'fastprogress', 'torcheval', 'matplotlib', 'numpy']
+
+[project.urls]
+Repository = "https://github.com/fastai/minai/"
+Documentation = "https://minai.fast.ai/"
+
+[project.entry-points.nbdev]
+minai = "minai._modidx:d"
+
+[project.optional-dependencies]
+dev = ['nbdev', 'accelerate', 'datasets', 'torchvision', 'transformers']
+
+[tool.setuptools.dynamic]
+version = {attr = "minai.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["minai"]
+
+[tool.nbdev]
+nbs_path = '.'
+branch = 'master'
+tst_flags = ''
+clean_ids = false
+jupyter_hooks = true
